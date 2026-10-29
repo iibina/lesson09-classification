@@ -63,9 +63,9 @@ def describe_values(series):
     s = series.dropna()
     if s.empty:
         return "값 없음"
-    if series.dtype == object:
-        kinds = sorted(s.unique().tolist())
-        return f"{len(kinds)}가지: " + ", ".join(map(str, kinds))
+    if not pd.api.types.is_numeric_dtype(series):
+        kinds = sorted(s.astype(str).unique().tolist())
+        return f"{len(kinds)}가지: " + ", ".join(kinds)
     if s.nunique() <= 2:
         return "0 또는 1 (두 가지)"
     return f"숫자: {s.min():g} ~ {s.max():g}"
