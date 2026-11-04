@@ -156,10 +156,10 @@ st.write(f"테스트용 **{n_test:,}명** 가운데 실제 뇌졸중인 사람�
 col_l, col_r = st.columns(2)
 with col_l:
     st.subheader(LR_NAME)
-    st.table(confusion_table(*counts[LR_NAME]))
+    st.dataframe(confusion_table(*counts[LR_NAME]))
 with col_r:
     st.subheader(TREE_NAME)
-    st.table(confusion_table(*counts[TREE_NAME]))
+    st.dataframe(confusion_table(*counts[TREE_NAME]))
 st.caption(
     "행은 실제, 열은 예측이에요. "
     "TP: 뇌졸중인데 뇌졸중이라 예측(맞힘) · FN: 뇌졸중인데 아니라고 예측(놓침) · "
@@ -179,7 +179,7 @@ metric_table = pd.DataFrame(
     index=[LR_NAME, TREE_NAME, BASE_NAME],
     columns=["정확도", "재현율", "정밀도", "F1"],
 )
-st.table(metric_table)
+st.dataframe(metric_table)
 st.caption(
     "정확도 = (TP + TN) ÷ 테스트용 전체 사람 수 · "
     "재현율 = TP ÷ 실제 뇌졸중인 사람 수 · "
@@ -191,11 +191,7 @@ st.caption(
 # 놓친 환자 / 헛짚은 사람 목록
 # ---------------------------------------------------------------
 st.header("3. 놓친 환자와 헛짚은 사람")
-chosen_name = st.radio(
-    "목록을 볼 모델",
-    [LR_NAME, TREE_NAME],
-    horizontal=True,
-)
+chosen_name = st.selectbox("목록을 볼 모델", [LR_NAME, TREE_NAME])
 
 view = test.copy()
 view["pred"] = pd.Series(preds[chosen_name], index=test.index)
